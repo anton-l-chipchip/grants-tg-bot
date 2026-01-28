@@ -1,22 +1,36 @@
-name: DEBUG STRUCTURE
+name: Africa Grants Bot (Test)
 
 on:
+  schedule:
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 jobs:
-  debug:
+  run:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: /home/runner/work/grants-tg-bot/grants-tg-bot
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: SHOW STRUCTURE
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
         run: |
           echo "PWD:"
           pwd
-          echo "------------------"
-          echo "ROOT LS:"
+          echo "FILES:"
           ls -la
-          echo "------------------"
-          echo "TREE:"
-          find . -maxdepth 4 -type f
+          pip install -r requirements.txt
+
+      - name: Run bot
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: |
+          python main.py
