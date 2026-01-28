@@ -2,7 +2,7 @@ name: Africa Grants Bot (Test)
 
 on:
   schedule:
-    - cron: "*/5 * * * *"   # каждые 5 минут
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -24,10 +24,15 @@ jobs:
           key: bot-state-v1
 
       - name: Install dependencies
+        working-directory: .
         run: |
+          echo "=== FILES IN WORKDIR ==="
+          ls -la
+          echo "========================"
           pip install -r requirements.txt
 
       - name: Run bot
+        working-directory: .
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         run: |
